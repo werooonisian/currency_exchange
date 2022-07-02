@@ -9,6 +9,11 @@ namespace Currency_Exchange.Data
     public interface ICurrencyRepository
     {
         Currency AddCurrencyToDatabase(Currency currency);
+        Currency UpdateCurrency(Currency currency);
+        Currency GetByCode(string code);
+        Rate GetByCurrencyId(int CurrencyId);
+        Rate UpdateCurrencyRate(Rate rate);
+        Rate GetDateFromDatabase();
 
     }
 }

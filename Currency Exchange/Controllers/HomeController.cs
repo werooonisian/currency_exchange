@@ -15,7 +15,7 @@ namespace Currency_Exchange.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
-        private readonly ICurrencyRepository _repository; //czy tu na pewno interface??????
+        private readonly ICurrencyRepository _repository; 
 
         public HomeController(ICurrencyRepository repository)
         {
@@ -28,7 +28,7 @@ namespace Currency_Exchange.Controllers
         [HttpPost("add_to_database")]
         public async Task PostDataToDatabase()
         {
-            ApiHelper.InicializedClient(); // czy to tu???
+            ApiHelper.InicializedClient(); 
 
             var currency = await CurrencyProcessor.LoadData();
 
@@ -40,5 +40,42 @@ namespace Currency_Exchange.Controllers
 
             _repository.AddCurrencyToDatabase(_currency);
         }
+
+        [HttpPut("update_database")]
+        public async Task UpdateDateInDatabase()
+        {
+            Rate rate = _repository.GetDateFromDatabase();
+
+            if(DateTime.Now.ToString("yyyy-MM-dd") != rate.EffectiveDate)
+            {
+
+                ApiHelper.InicializedClient();
+
+                var currency = await CurrencyProcessor.LoadData();
+
+                Currency currency_from_db =  _repository.GetByCode(currency.Code);
+                Rate rate_from_db = _repository.GetByCurrencyId(currency_from_db.Id); //maybe zmienić na rate????
+
+                rate_from_db.EffectiveDate = currency.Rates.FirstOrDefault().EffectiveDate;
+                rate_from_db.Mid = currency.Rates.FirstOrDefault().Mid;
+
+                _repository.UpdateCurrencyRate(rate_from_db);
+            }
+        }
+
+        [HttpGet("get_current_rate")]
+        public async Task<float> GetRate()
+        {
+            try
+            {
+                var rate = _repository.GetDateFromDatabase().Mid;
+                return rate;
+            }
+            catch
+            {
+                throw new Exception();
+            }
+        }
+
     }
 }

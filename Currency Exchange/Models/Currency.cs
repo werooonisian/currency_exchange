@@ -12,6 +12,6 @@ namespace Currency_Exchange.Models
         public int Id { get; set; }
         public string Code { get; set; }
 
-        public List<Rate> Rates { get; set; }
+        public ICollection<Rate> Rates { get; set; }
     }
 }
