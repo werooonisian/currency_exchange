@@ -1,4 +1,5 @@
 using Currency_Exchange.Data;
+using Currency_Exchange.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,11 +38,12 @@ namespace Currency_Exchange
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddJsonOptions(options =>
-                options.JsonSerializerOptions.PropertyNamingPolicy = null); ///????? maybe inaczej 
+                options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services.AddControllers();
 
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+            services.AddScoped<CurrencyService>();
 
             services.AddDbContext<AppDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

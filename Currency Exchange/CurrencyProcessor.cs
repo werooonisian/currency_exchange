@@ -23,7 +23,7 @@ namespace Currency_Exchange
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase); //czemu nie udało się
+                    throw new Exception(response.ReasonPhrase); 
                 }
             }
         }
