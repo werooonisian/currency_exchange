@@ -14,7 +14,6 @@ namespace Currency_Exchange
         public static void InicializedClient()
         {
             httpClient = new HttpClient();
-           // httpClient.BaseAddress = new Uri("http://api.nbp.pl/");
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }

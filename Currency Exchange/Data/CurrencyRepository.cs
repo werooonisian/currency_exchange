@@ -21,5 +21,34 @@ namespace Currency_Exchange.Data
             currency.Id = _context.SaveChanges();
             return currency;
         }
+
+        public Currency UpdateCurrency(Currency currency)
+        {
+            _context.Currency.Update(currency);
+            _context.SaveChanges();
+            return currency;
+        }
+
+        public Currency GetByCode(string Code)
+        {
+            return _context.Currency.FirstOrDefault(c => c.Code == Code);
+        }
+
+        public Rate GetByCurrencyId(int CurrencyId)
+        {
+            return _context.Rates.FirstOrDefault(r => r.CurrencyId == CurrencyId);
+        }
+
+        public Rate UpdateCurrencyRate(Rate rate)
+        {
+            _context.Rates.Update(rate);
+            _context.SaveChanges();
+            return rate;
+        }
+
+        public Rate GetDateFromDatabase()
+        {
+            return _context.Rates.FirstOrDefault();
+        }
     }
 }

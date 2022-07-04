@@ -1,8 +1,9 @@
-﻿using Currency_Exchange.Data; //????
+﻿using Currency_Exchange.Data;
 using Currency_Exchange.Models;
+using Currency_Exchange.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json; //IDK ???
+using Newtonsoft.Json; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,30 +16,30 @@ namespace Currency_Exchange.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
-        private readonly ICurrencyRepository _repository; //czy tu na pewno interface??????
+        private readonly CurrencyService _service;
 
-        public HomeController(ICurrencyRepository repository)
+        private readonly AppDbContext _context;
+
+        public HomeController(CurrencyService service, AppDbContext context)
         {
-            _repository = repository;
+            _service = service;
+            _context = context;
         }
 
-
-
-
-        [HttpPost("add_to_database")]
-        public async Task PostDataToDatabase()
+        [HttpGet("get_current_rate")]
+        public async Task<Rate> GetRate()
         {
-            ApiHelper.InicializedClient(); // czy to tu???
-
-            var currency = await CurrencyProcessor.LoadData();
-
-            var _currency = new Currency
+            if(!_context.Currency.Any())
             {
-                Code = currency.Code,
-                Rates = currency.Rates
-            };
+                await _service.AddDataToDatabase();
+            }
+            else
+            {
+                await _service.UpdateDateInDatabase();
+            }
 
-            _repository.AddCurrencyToDatabase(_currency);
+            return await _service.GetRate();
         }
+
     }
 }
